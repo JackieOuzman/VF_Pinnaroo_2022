@@ -344,13 +344,13 @@ biomass = -191	 +  1786.4 * CC  LAI survey value
 
 
 
-### Grids of biomass THIS IS STILL TO COME
+### Grids of biomass 
 
 Converted using the values and grids outlined above.
 
 ```{r phenom DIST converted to biomass no trial, echo=FALSE, message=FALSE, warning=FALSE}
 
-include_graphics(""W:/VF/Pinnaroo 2022/Biomass Data Maps/Pre trial_biomass_LAI.png"")
+include_graphics("W:/VF/Pinnaroo 2022/Biomass Data Maps/Pre trial_biomass_LAI.png")
 
 
 ```
