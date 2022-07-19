@@ -136,33 +136,38 @@ include_graphics("W:/VF/Pinnaroo 2022/Biomass Data Maps/maps/Biomass_maps_Pre_al
 
 ## plot of biomass vs survey data 
 
-Linnear model THIS IS STILL TO COME
+Linnear model 
+
+Need to confirm the sampling size I have assumed 2*1m cuts with 30cm row spacing
 
 
 
 
-```{r no_trial biomass vs biomass survey, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+```{r no_trial biomass vs biomass survey, echo=FALSE, message=FALSE, warning=FALSE}
 
-no_trial_biomass <- read.csv("W:/VF/Pinnaroo/Biomass_data_maps/Heaths lucerne/extracted_biomass_pts_grids.csv")
-
-
-
+pre_trial_biomass <- read.csv("W:/VF/Pinnaroo 2022/Biomass Data Maps/calibration_pre_trial_biomass/pre_trial_pts_extract_grids_withBiomass.csv")
+                             
+                             
 #names(no_trial_biomass)
 #rename some clm this is the order that was extered when extrcated in Arcmap
-no_trial_biomass <- no_trial_biomass %>% 
-  rename(Survey_Phen_DIST = Pheonm_DIS,
-         Survey_Phen_LAI = Pheonm_LAI,
-         Survey_Phen_NDVI = Pheonm_NDV,
-         Survey_CC_DIST = CC_DIST,
-         Survey_CC_LAI = CC_LAI,
-         Survey_CC_NDVI = CC_NDVI)
-
-
-
-
-
+pre_trial_biomass <- pre_trial_biomass %>%
+  rename(
+    Survey_Phen_DIST = Phen_DIST,
+    Survey_Phen_LAI = Phen_LAI,
+    Survey_Phen_NDVI = Phen_NDVI,
+    Survey_CC_DIST = CC_DIST,
+    Survey_CC_LAI = CC_LAI,
+    Survey_CC_NDVI = CC_NDVI,
+    kg_ha = `BM..kg...Ha`
+  )
+                             
+                             
+                             
+                             
+                             
 #let rearragne the data so I can do a facet wrap
-no_trial_biomass_long <- no_trial_biomass %>% 
+pre_trial_biomass_long <-
+  pre_trial_biomass %>%
   pivot_longer(cols = starts_with("Survey"),
                names_to = "survey_type",
                values_to = "value")
@@ -177,94 +182,96 @@ no_trial_biomass_long <- no_trial_biomass %>%
 # fullrange : logical value. If TRUE, the fit spans the full range of the plot
 # level : level of confidence interval to use. Default value is 0.95
 
-plot1 <- no_trial_biomass_long %>%
-  #filter(survey_type == "Survey_CC_NDVI") %>% 
-  ggplot(aes(x = value  , y =  kg_ha)) +
-  geom_point()+
-  geom_smooth(mapping = aes(x = value  , y =  kg_ha,group = survey_type),
-              method = lm, se = FALSE)+
-  #geom_smooth(se = FALSE)+
-  facet_wrap(.~survey_type, scales = "free_x")+
-  theme_classic() +
-  theme(axis.text.x = element_text(angle = 90))+
-  labs(
-    x = paste0("survey data"),
-    y = "biomass cuts kg / ha",
-    title = "No trial data"
-  )
-plot1
+#names(no_trial_biomass_long)
 
+plot1 <- pre_trial_biomass_long %>%
+  #filter(survey_type == "Survey_CC_NDVI") %>%
+  ggplot(aes(x = value  , y =  kg_ha)) +
+  geom_point() +
+  geom_smooth(
+    mapping = aes(x = value  , y =  kg_ha, group = survey_type),
+    method = lm,
+    se = FALSE
+  ) +
+  #geom_smooth(se = FALSE)+
+  facet_wrap(. ~ survey_type, scales = "free_x") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90)) +
+  labs(x = paste0("survey data"),
+       y = "biomass cuts kg / ha",
+       title = "Pre trial data")
+plot1
 
 ```
 
 
 
 
-## The fit of models biomass vs survey data THIS IS STILL TO COME
+## The fit of models biomass vs survey data 
 
 
 
 
-```{r no_trial biomass vs biomass survey model fit1, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+```{r no_trial biomass vs biomass survey model fit1, echo=FALSE, message=FALSE, warning=FALSE}
 
 
 #http://www.sthda.com/english/articles/40-regression-analysis/167-simple-linear-regression-in-r/
 
 #names(no_trial_biomass_long)
 
-no_trial_biomass_long_CC_NDVI_no <- no_trial_biomass_long %>% 
+pre_trial_biomass_long_CC_NDVI_no <- pre_trial_biomass_long %>% 
   filter(survey_type == "Survey_CC_NDVI")
-no_trial_biomass_long_CC_LAI_no <- no_trial_biomass_long %>% 
+pre_trial_biomass_long_CC_LAI_no <- pre_trial_biomass_long %>% 
   filter(survey_type == "Survey_CC_LAI")
-no_trial_biomass_long_CC_DIST_no <- no_trial_biomass_long %>% 
+pre_trial_biomass_long_CC_DIST_no <- pre_trial_biomass_long %>% 
   filter(survey_type == "Survey_CC_DIST")
 
-no_trial_biomass_long_Phen_NDVI_no <- no_trial_biomass_long %>% 
+pre_trial_biomass_long_Phen_NDVI_no <- pre_trial_biomass_long %>% 
   filter(survey_type == "Survey_Phen_NDVI")
-no_trial_biomass_long_Phen_LAI_no <- no_trial_biomass_long %>% 
+pre_trial_biomass_long_Phen_LAI_no <- pre_trial_biomass_long %>% 
   filter(survey_type == "Survey_Phen_LAI")
-no_trial_biomass_long_Phen_DIST_no <- no_trial_biomass_long %>% 
+pre_trial_biomass_long_Phen_DIST_no <- pre_trial_biomass_long %>% 
   filter(survey_type == "Survey_Phen_DIST")
 
 
 
-cor_no_CC_NDVI <- cor(no_trial_biomass_long_CC_NDVI_no$value, 
-                       no_trial_biomass_long_CC_NDVI_no$kg_ha)
-cor_no_CC_LAI <- cor(no_trial_biomass_long_CC_LAI_no$value, 
-                      no_trial_biomass_long_CC_LAI_no$kg_ha)
-cor_no_CC_DIST <- cor(no_trial_biomass_long_CC_DIST_no$value, 
-                       no_trial_biomass_long_CC_DIST_no$kg_ha) 
+cor_no_CC_NDVI <- cor(pre_trial_biomass_long_CC_NDVI_no$value, 
+                       pre_trial_biomass_long_CC_NDVI_no$kg_ha)
+cor_no_CC_LAI <- cor(pre_trial_biomass_long_CC_LAI_no$value, 
+                      pre_trial_biomass_long_CC_LAI_no$kg_ha)
+cor_no_CC_DIST <- cor(pre_trial_biomass_long_CC_DIST_no$value, 
+                       pre_trial_biomass_long_CC_DIST_no$kg_ha) 
 
-cor_no_Phen_NDVI <- cor(no_trial_biomass_long_Phen_NDVI_no$value, 
-                         no_trial_biomass_long_Phen_NDVI_no$kg_ha)
-cor_no_Phen_LAI <- cor(no_trial_biomass_long_Phen_LAI_no$value, 
-                        no_trial_biomass_long_Phen_LAI_no$kg_ha)
-cor_no_Phen_DIST <- cor(no_trial_biomass_long_Phen_DIST_no$value, 
-                         no_trial_biomass_long_Phen_DIST_no$kg_ha) 
+cor_no_Phen_NDVI <- cor(pre_trial_biomass_long_Phen_NDVI_no$value, 
+                         pre_trial_biomass_long_Phen_NDVI_no$kg_ha)
+cor_no_Phen_LAI <- cor(pre_trial_biomass_long_Phen_LAI_no$value, 
+                        pre_trial_biomass_long_Phen_LAI_no$kg_ha)
+cor_no_Phen_DIST <- cor(pre_trial_biomass_long_Phen_DIST_no$value, 
+                         pre_trial_biomass_long_Phen_DIST_no$kg_ha) 
 
 
 #Make a table with the analysis correlation table
 
-no_trial_table <- data.frame(survey  = c("NDVI", "LAI", "DIST", "NDVI", "LAI", "DIST"),
+pre_trial_table <- data.frame(survey  = c("NDVI", "LAI", "DIST", "NDVI", "LAI", "DIST"),
                               survey_type  = c("Crop Circle", "Crop Circle", "Crop Circle", "Phenom","Phenom","Phenom" ),
                               correlation = c(cor_no_CC_NDVI, cor_no_CC_LAI, cor_no_CC_DIST,cor_no_Phen_NDVI, cor_no_Phen_LAI, cor_no_Phen_DIST ),
-                              timing  = c("no_trial", "no_trial", "no_trial", "no_trial", "no_trial", "no_trial"))
+                              timing  = c("pre_trial", "pre_trial", "pre_trial", "pre_trial", "pre_trial", "pre_trial"))
 
 
 
 model_no_CC_NDVI <- summary(lm(kg_ha ~ value, 
-                                data = no_trial_biomass_long_CC_NDVI_no))
+                                data = pre_trial_biomass_long_CC_NDVI_no))
 model_no_CC_LAI <- summary(lm(kg_ha ~ value, 
-                               data = no_trial_biomass_long_CC_LAI_no))
+                               data = pre_trial_biomass_long_CC_LAI_no))
 model_no_CC_DIST <- summary(lm(kg_ha ~ value, 
-                                data = no_trial_biomass_long_CC_DIST_no))
+                                data = pre_trial_biomass_long_CC_DIST_no))
 
 model_no_Phen_NDVI <- summary(lm(kg_ha ~ value, 
-                                  data = no_trial_biomass_long_Phen_NDVI_no))
+                                  data = pre_trial_biomass_long_Phen_NDVI_no))
 model_no_Phen_LAI <- summary(lm(kg_ha ~ value, 
-                                 data = no_trial_biomass_long_Phen_LAI_no))
+                                 data = pre_trial_biomass_long_Phen_LAI_no))
 model_no_Phen_DIST <- summary(lm(kg_ha ~ value, 
-                                  data = no_trial_biomass_long_Phen_DIST_no))
+                                  data = pre_trial_biomass_long_Phen_DIST_no))
 
 # model_no_CC_NDVI
 # model_no_CC_NDVI$coefficients[1,1] #b0 Intercept
@@ -275,7 +282,7 @@ model_no_Phen_DIST <- summary(lm(kg_ha ~ value,
 
 #add this info to the no_trial_table
 
-no_trial_model_table <- data.frame(survey  = c("NDVI", "LAI", "DIST", "NDVI", "LAI", "DIST"),
+pre_trial_model_table <- data.frame(survey  = c("NDVI", "LAI", "DIST", "NDVI", "LAI", "DIST"),
                                     survey_type  = c("Crop Circle", "Crop Circle", "Crop Circle", "Phenom","Phenom","Phenom" ),
                                     
                                     Intercept = c(model_no_CC_NDVI$coefficients[1,1], model_no_CC_LAI$coefficients[1,1], model_no_CC_DIST$coefficients[1,1],
@@ -295,13 +302,14 @@ no_trial_model_table <- data.frame(survey  = c("NDVI", "LAI", "DIST", "NDVI", "L
 )
 
 
+pre_trial_model <- left_join(pre_trial_table, pre_trial_model_table)
 
 
-no_trial_model <- left_join(no_trial_table, no_trial_model_table)
 
-no_trial_model <- no_trial_model[, c(4, 1, 2, 3, 5,6,7,8)]
 
-datatable(no_trial_model,
+pre_trial_model <- pre_trial_model[, c(4, 1, 2, 3, 5,6,7,8)]
+
+datatable(pre_trial_model,
           options = list(dom = 't'),#removes the search bar
           caption = 'Details of the models.',
           rownames = FALSE)%>%
@@ -314,24 +322,25 @@ datatable(no_trial_model,
 ```
 
 
-The Pheonm LAI has the best correlations but the R2 is 0.XX.
+The Crop Circle LAI has the best correlations (0.79) but the R2 is 0.62.
 
 
-`summary(lm( kg_ha~  value, data = no_trial_biomass_long_Phen_LAI_no))`
+`summary(lm( kg_ha~  value, data = pre_trial_biomass_long_CC_LAI_no))`
 
 
-```{r no_trial biomass vs biomass survey best model fit, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
-no_trial_biomass_long_Phen_LAI_no <- no_trial_biomass_long %>% 
-  filter(survey_type == "Survey_Phen_LAI")
+```{r no_trial biomass vs biomass survey best model fit, echo=FALSE, message=FALSE, warning=FALSE}
 
-summary(lm( kg_ha~  value, data = no_trial_biomass_long_Phen_LAI_no))
+pre_trial_biomass_long_CC_LAI_no <- pre_trial_biomass_long %>% 
+  filter(survey_type == "Survey_CC_LAI")
+
+summary(lm( kg_ha~  value, data = pre_trial_biomass_long_CC_LAI_no))
 ```
 
 ### Best option for converting survey data to biomass in kg/ha 
 
 biomass = intercept + slope * survey
 
-biomass = xx +  xx * Phenom Dist survey value
+biomass = -191	 +  1786.4 * CC  LAI survey value
 
 
 
@@ -339,9 +348,9 @@ biomass = xx +  xx * Phenom Dist survey value
 
 Converted using the values and grids outlined above.
 
-```{r phenom DIST converted to biomass no trial, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+```{r phenom DIST converted to biomass no trial, echo=FALSE, message=FALSE, warning=FALSE}
 
-include_graphics("W:/VF/Pinnaroo/Biomass_data_maps/Heaths lucerne/Biomass_map.png")
+include_graphics(""W:/VF/Pinnaroo 2022/Biomass Data Maps/Pre trial_biomass_LAI.png"")
 
 
 ```
