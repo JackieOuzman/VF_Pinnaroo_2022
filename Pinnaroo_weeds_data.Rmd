@@ -1,0 +1,149 @@
+---
+title: "Pinnaroo Weeds data analysis"
+author: "Jackie Ouzman"
+date: "14/07/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r lib, include=FALSE}
+library(dplyr)
+library(tidyverse)
+library(readr)
+library(lubridate)
+library(DT)
+library(sp)
+
+
+library(rgdal)
+#library(sf)
+
+#install.packages("plotKML")
+library(plotKML)
+library(knitr)
+library(png)
+
+library(readxl)
+
+
+library(ggmap)
+library(maps)
+library(mapdata)
+
+library(raster)
+#library(hms) Add these before I use them?
+#library(plyr)
+```
+
+
+
+
+
+
+# Sampling weeds 
+
+- Pre trial collection done 18/07/2022 by Rick using hand held GPS
+- post trial collection done 24/08/2022 by Rick Jackie, Damian and Rachel navigating to pre defined sampling pts.
+
+# Sampling pre trial
+
+Note the 2 cluster solution (surrogate from soil map is displayed with sampling locations)
+
+```{r weed counts pre_trial, echo=FALSE, message=FALSE, warning=FALSE}
+
+
+#include_graphics("W:/VF/Pinnaroo 2022/weeds/Pre_Trial/Weed sampling pre trial with cluster solutions.png")
+include_graphics("W:/VF/Pinnaroo 2022/weeds/Pre_Trial/Weed sampling pre trial with cluster soultions.png")
+
+```
+
+# Sampling strategy for post trial
+
+- Post trial the aim was to get a good coverage of sites on the control, buffer and VF.
+- Samples to be collected on different soil types.
+- Since we don't have EM38 or other soil map we have clusters all the biomass grids and used the 2 cluster solution map as a surrogate for soil type.
+
+
+
+## Survey grids used in clustering
+
+```{r cc_and phenom pre_trial, echo=FALSE, message=FALSE, warning=FALSE}
+
+
+include_graphics("W:/VF/Pinnaroo 2022/CC Phenom Post Pin22/Biomass_maps_Post_all_grids.jpg")
+
+```
+
+
+## Clustering outputs
+
+```{r pre_trial cluster, echo=FALSE, message=FALSE, warning=FALSE}
+
+
+include_graphics("W:/VF/Pinnaroo 2022/Biomass Data Maps/cluster/cluster_pre_trial.jpg")
+
+
+```
+
+# Sampling strategy for post trial map
+
+
+```{r post_trial sampling stra, echo=FALSE, message=FALSE, warning=FALSE}
+
+
+include_graphics("W:/VF/Pinnaroo 2022/weeds/Weed sampling final.png")
+
+
+```
+
+
+# Data analysis pre trial
+
+```{r import weeds data, echo=FALSE, message=FALSE, warning=FALSE}
+
+
+weeds_all <- read_excel("W:/VF/Pinnaroo 2022/weeds/weed_counts_all/all weed counts.xlsx", sheet = "all")
+
+weeds_all <- weeds_all %>% 
+  filter(is.na (comment)) 
+# names(weeds_all)
+# distinct(weeds_all,event )
+
+weeds_post_trial <- weeds_all %>% filter(event ==  "post trial 1")
+weeds_pre_trial <- weeds_all %>% filter(event ==  "pre trial")
+
+
+#names(weeds_pre_trial)
+weeds_pre_trial_summary <- weeds_pre_trial %>% 
+  group_by(cluster2Pr) %>% 
+  summarise(
+            n = n(),
+            mean_total_count = mean(total_coun,  na.rm = FALSE),
+            sd = sd(total_coun,   na.rm = FALSE),
+            se = sd/sqrt(n))
+
+#weeds_pre_trial_summary   
+weeds_pre_trial_summary$cluster2Pr <- factor(weeds_pre_trial_summary$cluster2Pr)
+
+
+# Error bars represent standard error of the mean
+ggplot(weeds_pre_trial_summary, aes(x=cluster2Pr, y=mean_total_count, fill=cluster2Pr)) + 
+  geom_bar(position=position_dodge(), stat="identity") +
+  geom_errorbar(aes(ymin=mean_total_count-se, ymax=mean_total_count+se),
+                width=.2,                    # Width of the error bars
+                position=position_dodge(.9))+
+  
+  xlab("clusters") +
+  ylab("total weed count") +
+  theme_bw()+
+  ggtitle("Total weed count on soil type\nPre trial survey") + theme(legend.position = "none")   
+
+
+
+
+```
