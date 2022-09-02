@@ -138,14 +138,14 @@ include_graphics("W:/VF/Pinnaroo 2022/Biomass Data Maps/maps/Biomass_maps_Pre_al
 
 Linnear model 
 
-Need to confirm the sampling size I have assumed 2*1m cuts with 30cm row spacing
+Confirm the sampling size I have assumed 2*1m cuts with 60cm row spacing (revised)
 
 
 
 
 ```{r no_trial biomass vs biomass survey, echo=FALSE, message=FALSE, warning=FALSE}
 
-pre_trial_biomass <- read.csv("W:/VF/Pinnaroo 2022/Biomass Data Maps/calibration_pre_trial_biomass/pre_trial_pts_extract_grids_withBiomass.csv")
+pre_trial_biomass <- read.csv("W:/VF/Pinnaroo 2022/Biomass Data Maps/calibration_pre_trial_biomass/pre_trial_pts_extract_grids.csv")
                              
                              
 #names(no_trial_biomass)
@@ -340,7 +340,7 @@ summary(lm( kg_ha~  value, data = pre_trial_biomass_long_CC_LAI_no))
 
 biomass = intercept + slope * survey
 
-biomass = -191	 +  1786.4 * CC  LAI survey value
+biomass = -96	 +  893 * CC  LAI survey value
 
 
 
@@ -350,7 +350,7 @@ Converted using the values and grids outlined above.
 
 ```{r phenom DIST converted to biomass no trial, echo=FALSE, message=FALSE, warning=FALSE}
 
-include_graphics("W:/VF/Pinnaroo 2022/Biomass Data Maps/Pre trial_biomass_LAI.png")
+include_graphics("W:/VF/Pinnaroo 2022/Biomass Data Maps/maps/Pre trial_biomass_LAI.png")
 
 
 ```
