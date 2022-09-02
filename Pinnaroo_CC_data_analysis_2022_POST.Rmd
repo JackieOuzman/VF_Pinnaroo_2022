@@ -51,7 +51,7 @@ Biomass survey was taken using Crop circle and Phenom and these were calibrated 
 
 ## Biomass field measures
 
-Biomass measured were taken the same day as post trial crop circle 02/8/2022
+Biomass measured were taken the same day as post trial crop circle 02/8/2022 (cals revised 2/9/2022)
 
 
 
@@ -127,7 +127,7 @@ Data processing done by Jackie and Rachel using the following settings:
 
 ```{r cc_and phenom pre_trial, echo=FALSE, message=FALSE, warning=FALSE}
 
-#include_graphics("W:/VF/Pinnaroo 2022/Biomass Data Maps/maps/Biomass_maps_Pre_all_grids.jpg")
+
 include_graphics("W:/VF/Pinnaroo 2022/CC Phenom Post Pin22/Biomass_maps_Post_all_grids.jpg")
 
 ```
@@ -137,26 +137,26 @@ include_graphics("W:/VF/Pinnaroo 2022/CC Phenom Post Pin22/Biomass_maps_Post_all
 
 Linnear model 
 
-Need to confirm the sampling size I have assumed 2*1m cuts with 30cm row spacing
+Confirm the sampling size I have assumed 2*1m cuts with 60cm row spacing (revised 2/9/2022)
 
 
 
 
 ```{r no_trial biomass vs biomass survey, echo=FALSE, message=FALSE, warning=FALSE}
 
-# pre_trial_biomass <- read.csv("W:/VF/Pinnaroo 2022/Biomass Data Maps/calibration_pre_trial_biomass/pre_trial_pts_extract_grids_withBiomass.csv")
-post_trial_biomass <- read.csv("W:/VF/Pinnaroo 2022/Biomass Post Pin22/Pin_Post_Cal_Pt_cut_grid.csv")                            
-                             
+
+post_trial_biomass <- read.csv("W:/VF/Pinnaroo 2022/Biomass Data Maps/calibration_post_trail_biomass/Pinnaroo_Sampling_points_wts_Post_proj_cc_ph_grids.csv")                             
+post_trial_biomass <- post_trial_biomass %>% filter(name != "in the other buffer")
 names(post_trial_biomass)
 #rename some clm this is the order that was extered when extrcated in Arcmap
 post_trial_biomass <- post_trial_biomass %>%
   rename(
-    Survey_Phen_DIST = Phen_DIST,
-    Survey_Phen_LAI = Phen_LAI,
-    Survey_Phen_NDVI = Phen_NDVI,
-    Survey_CC_DIST = CC_DIST,
-    Survey_CC_LAI = CC_LAI,
-    Survey_CC_NDVI = CC_NDVI,
+    Survey_Phen_DIST = PhenDIS_po,
+    Survey_Phen_LAI = PhenLAI_po,
+    Survey_Phen_NDVI = PhenNDR_po,
+    Survey_CC_DIST = CC_Dist_po,
+    Survey_CC_LAI = CC_LAI_po,
+    Survey_CC_NDVI = CC_NDVI_po,
     kg_ha = `biomass_Kg`
   )
                              
@@ -339,9 +339,12 @@ summary(lm( kg_ha~  value, data = post_trial_biomass_long_CC_LAI_no))
 
 biomass = intercept + slope * survey
 
-biomass = -142.2	 +  1961.8 * CC  LAI survey value
+biomass = -71	981	 +  981 * CC  LAI survey value
 
 
+
+
+##### Up to here need to#######
 
 ### Grids of biomass
 
