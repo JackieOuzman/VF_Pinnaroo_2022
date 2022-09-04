@@ -138,7 +138,7 @@ include_graphics("W:/VF/Pinnaroo 2022/CC Phenom Post Pin22/Biomass_maps_Post_all
 Linnear model 
 
 Confirm the sampling size I have assumed 2*1m cuts with 60cm row spacing (revised 2/9/2022)
-
+Note that there are a few high biomass values, these are in the buffer and reflect the better soil.
 
 
 
@@ -254,7 +254,7 @@ cor_no_Phen_DIST <- cor(post_trial_biomass_long_Phen_DIST_no$value,
 post_trial_table <- data.frame(survey  = c("NDVI", "LAI", "DIST", "NDVI", "LAI", "DIST"),
                               survey_type  = c("Crop Circle", "Crop Circle", "Crop Circle", "Phenom","Phenom","Phenom" ),
                               correlation = c(cor_no_CC_NDVI, cor_no_CC_LAI, cor_no_CC_DIST,cor_no_Phen_NDVI, cor_no_Phen_LAI, cor_no_Phen_DIST ),
-                              timing  = c("pre_trial", "pre_trial", "pre_trial", "pre_trial", "pre_trial", "pre_trial"))
+                              timing  = c("post_trial", "post_trial", "post_trial", "post_trial", "post_trial", "pre_trial"))
 
 
 
@@ -322,6 +322,7 @@ datatable(post_trial_model,
 
 
 The Crop Circle LAI has the correlations (0.80) but the R2 is 0.65.
+We used CC LAI in the pre analysis - so it makes good sense to use this.
 
 
 `summary(lm( kg_ha~  value, data = post_trial_biomass_long_CC_LAI_no))`
