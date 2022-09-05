@@ -57,8 +57,8 @@ Note the 2 cluster solution (surrogate from soil map is displayed with sampling 
 ```{r weed counts pre_trial, echo=FALSE, message=FALSE, warning=FALSE}
 
 
-#include_graphics("W:/VF/Pinnaroo 2022/weeds/Pre_Trial/Weed sampling pre trial with cluster solutions.png")
-include_graphics("W:/VF/Pinnaroo 2022/weeds/Pre_Trial/Weed sampling pre trial with cluster soultions.png")
+
+include_graphics("W:/VF/Pinnaroo 2022/weeds/maps/Pre trial_biomass_weeds.png")
 
 ```
 
@@ -75,7 +75,7 @@ include_graphics("W:/VF/Pinnaroo 2022/weeds/Pre_Trial/Weed sampling pre trial wi
 ```{r cc_and phenom pre_trial, echo=FALSE, message=FALSE, warning=FALSE}
 
 
-include_graphics("W:/VF/Pinnaroo 2022/CC Phenom Post Pin22/Biomass_maps_Post_all_grids.jpg")
+include_graphics("W:/VF/Pinnaroo 2022/Biomass/maps/Biomass_maps_Pre_all_grids.png")
 
 ```
 
@@ -85,7 +85,7 @@ include_graphics("W:/VF/Pinnaroo 2022/CC Phenom Post Pin22/Biomass_maps_Post_all
 ```{r pre_trial cluster, echo=FALSE, message=FALSE, warning=FALSE}
 
 
-include_graphics("W:/VF/Pinnaroo 2022/Biomass Data Maps/cluster/cluster_pre_trial.jpg")
+include_graphics("W:/VF/Pinnaroo 2022/Biomass/maps/cluster_pre_trial.jpg")
 
 
 ```
@@ -96,7 +96,7 @@ include_graphics("W:/VF/Pinnaroo 2022/Biomass Data Maps/cluster/cluster_pre_tria
 ```{r post_trial sampling stra, echo=FALSE, message=FALSE, warning=FALSE}
 
 
-include_graphics("W:/VF/Pinnaroo 2022/weeds/Weed sampling final.png")
+include_graphics("W:/VF/Pinnaroo 2022/weeds/maps/Weed sampling final.png")
 
 
 ```
