@@ -87,18 +87,22 @@ We have used NDVI, LAI and DIST, there are other signals / channels that can be 
 
 CC  
 
-- `"W:\VF\Pinnaroo 2022\CC Phenom Post Pin22\working_jax\CC_post\dist\Vesper\Pin22CCmerged_v1_HighDensity_DIST_PRED_2m.tif"`
-- `"W:\VF\Pinnaroo 2022\CC Phenom Post Pin22\working_jax\CC_post\LeafAindx\Vesper\Pin22CCmerged_v1_HighDensity_LAI_VI_PRED_2m.tif"`
-- `"W:\VF\Pinnaroo 2022\CC Phenom Post Pin22\working_jax\CC_post\NDVI\Vesper\Pin22CCmerged_v1_HighDensity_NDVI_PRED_2m.tif"`
+- `"\\FSSA2-ADL\clw-share1\Microlab\VF\Pinnaroo 2022\Biomass\survey_processing\post_trial\grids_post\Pin22CCmerged_v1_HighDensity_NDVI_PRED_2m.tif"`
+
+- `"\\FSSA2-ADL\clw-share1\Microlab\VF\Pinnaroo 2022\Biomass\survey_processing\post_trial\grids_post\Pin22CCmerged_v1_HighDensity_DIST_PRED_2m.tif"`
+
+- `"\\FSSA2-ADL\clw-share1\Microlab\VF\Pinnaroo 2022\Biomass\survey_processing\post_trial\grids_post\Pin22CCmerged_v1_HighDensity_LAI_VI_PRED_2m.tif"`
 
 
 
 
 Phenom 
 
-- `"W:\VF\Pinnaroo 2022\CC Phenom Post Pin22\working_jax\Phen\Dist\Vesper\PhenompostPinnaroo_HighDensity_DIST_PRED_2m.tif"` 
-- `"W:\VF\Pinnaroo 2022\CC Phenom Post Pin22\working_jax\Phen\LAI\Vesper\PhenompostPinnaroo_HighDensity_LAI_VI_PRED_2m.tif"` 
-- `"W:\VF\Pinnaroo 2022\CC Phenom Post Pin22\working_jax\Phen\NDVI_2\Vesper\PhenompostPinnaroo_HighDensity_NDRE_PRED_2m.tif"` 
+- `"\\FSSA2-ADL\clw-share1\Microlab\VF\Pinnaroo 2022\Biomass\survey_processing\post_trial\grids_post\PhenompostPinnaroo_HighDensity_NDRE_PRED_2m.tif"`
+
+-`"\\FSSA2-ADL\clw-share1\Microlab\VF\Pinnaroo 2022\Biomass\survey_processing\post_trial\grids_post\PhenompostPinnaroo_HighDensity_DIST_PRED_2m.tif"`
+
+- `"\\FSSA2-ADL\clw-share1\Microlab\VF\Pinnaroo 2022\Biomass\survey_processing\post_trial\grids_post\PhenompostPinnaroo_HighDensity_LAI_VI_PRED_2m.tif"`
 
 
 
@@ -128,7 +132,7 @@ Data processing done by Jackie and Rachel using the following settings:
 ```{r cc_and phenom pre_trial, echo=FALSE, message=FALSE, warning=FALSE}
 
 
-include_graphics("W:/VF/Pinnaroo 2022/CC Phenom Post Pin22/Biomass_maps_Post_all_grids.jpg")
+include_graphics("W:/VF/Pinnaroo 2022/Biomass/maps/Biomass_maps_Post_all_grids.png")
 
 ```
 
@@ -138,6 +142,7 @@ include_graphics("W:/VF/Pinnaroo 2022/CC Phenom Post Pin22/Biomass_maps_Post_all
 Linnear model 
 
 Confirm the sampling size I have assumed 2*1m cuts with 60cm row spacing (revised 2/9/2022)
+
 Note that there are a few high biomass values, these are in the buffer and reflect the better soil.
 
 
@@ -145,7 +150,7 @@ Note that there are a few high biomass values, these are in the buffer and refle
 ```{r no_trial biomass vs biomass survey, echo=FALSE, message=FALSE, warning=FALSE}
 
 
-post_trial_biomass <- read.csv("W:/VF/Pinnaroo 2022/Biomass Data Maps/calibration_post_trail_biomass/Pinnaroo_Sampling_points_wts_Post_proj_cc_ph_grids.csv")                             
+post_trial_biomass <- read.csv("W:/VF/Pinnaroo 2022/Biomass/calibration_biomass/calibration_post_trail_biomass/Pinnaroo_Sampling_points_wts_Post_proj_cc_ph_grids.csv")                             
 post_trial_biomass <- post_trial_biomass %>% filter(name != "in the other buffer")
 names(post_trial_biomass)
 #rename some clm this is the order that was extered when extrcated in Arcmap
@@ -345,8 +350,6 @@ biomass = -71	981	 +  981 * CC  LAI survey value
 
 
 
-##### Up to here need to#######
-
 ### Grids of biomass
 
 Converted using the values and grids outlined above.
@@ -354,7 +357,7 @@ Converted using the values and grids outlined above.
 ```{r phenom DIST converted to biomass no trial, echo=FALSE, message=FALSE, warning=FALSE}
 
 
-include_graphics("W:/VF/Pinnaroo 2022/Biomass Post Pin22/calibration_data_biomas/Post trial_biomass_LAI.png")
+include_graphics("W:/VF/Pinnaroo 2022/Biomass/maps/Post trial_biomass_LAI.png")
 ```
 
 
