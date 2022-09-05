@@ -69,8 +69,7 @@ Crop circle and Phenom survey undertaken by Damian on 13/7/2022
 
 Survey
 
-- `"\\FSSA2-ADL\clw-share1\Microlab\VF\Pinnaroo 2022\Biomass Data Maps\Raw_data\Phenom 2022\Pre trial\merged Phenom Pinnaroo 2022.csv"`
-- `"\\FSSA2-ADL\clw-share1\Microlab\VF\Pinnaroo 2022\Biomass Data Maps\Raw_data\CC 2022\Pre trial\merged CC Pinnaroo 2022.csv"`
+- '"\\FSSA2-ADL\clw-share1\Microlab\VF\Pinnaroo 2022\Biomass\raw_data\pre_trial"'
 
 
 
@@ -88,19 +87,22 @@ We have used NDVI, LAI and DIST, there are other signals / channels that can be 
 
 CC  
 
-- `"\\FSSA2-ADL\clw-share1\Microlab\VF\Pinnaroo 2022\Biomass Data Maps\CC_PreTrial\DIST\Vesper\mergedCCPinnaroo2_HighDensity_DIST_PRED_2m.tif"`
-- `"\\FSSA2-ADL\clw-share1\Microlab\VF\Pinnaroo 2022\Biomass Data Maps\CC_PreTrial\LAI_VI\Vesper\mergedCCPinnaroo2_HighDensity_LAI_VI_PRED_2m.tif"`
-- `"\\FSSA2-ADL\clw-share1\Microlab\VF\Pinnaroo 2022\Biomass Data Maps\CC_PreTrial\NDVI\Vesper\mergedCCPinnaroo2_HighDensity_NDVI_PRED_2m.tif"`
+- `"\\FSSA2-ADL\clw-share1\Microlab\VF\Pinnaroo 2022\Biomass\survey_processing\pre_trial\pre_grids\mergedCCPinnaroo2_HighDensity_NDVI_PRED_2m.tif"`
 
+- `"\\FSSA2-ADL\clw-share1\Microlab\VF\Pinnaroo 2022\Biomass\survey_processing\pre_trial\pre_grids\mergedCCPinnaroo2_HighDensity_DIST_PRED_2m.tif"`
+
+- `"\\FSSA2-ADL\clw-share1\Microlab\VF\Pinnaroo 2022\Biomass\survey_processing\pre_trial\pre_grids\mergedCCPinnaroo2_HighDensity_LAI_VI_PRED_2m.tif"`
 
 
 
 
 Phenom 
 
-- `"\\FSSA2-ADL\clw-share1\Microlab\VF\Pinnaroo 2022\Biomass Data Maps\Phen_PreTrial\DIST\Vesper\mergedPhenomPinnar_HighDensity_DIST_PRED_2m.tif"` 
-- `"\\FSSA2-ADL\clw-share1\Microlab\VF\Pinnaroo 2022\Biomass Data Maps\Phen_PreTrial\LAI_VI\Vesper\mergedPhenomPinnar_HighDensity_LAI_VI_PRED_2m.tif"` 
-- `"\\FSSA2-ADL\clw-share1\Microlab\VF\Pinnaroo 2022\Biomass Data Maps\Phen_PreTrial\NDVI\Vesper\mergedPhenomPinnar_HighDensity_NDVI_PRED_2m.tif"` 
+- `"\\FSSA2-ADL\clw-share1\Microlab\VF\Pinnaroo 2022\Biomass\survey_processing\pre_trial\pre_grids\mergedPhenomPinnar_HighDensity_LAI_VI_PRED_2m.tif"`
+
+- `"\\FSSA2-ADL\clw-share1\Microlab\VF\Pinnaroo 2022\Biomass\survey_processing\pre_trial\pre_grids\mergedPhenomPinnar_HighDensity_NDVI_PRED_2m.tif"`
+
+- `"\\FSSA2-ADL\clw-share1\Microlab\VF\Pinnaroo 2022\Biomass\survey_processing\pre_trial\pre_grids\mergedPhenomPinnar_HighDensity_DIST_PRED_2m.tif"`
 
 
 
@@ -129,7 +131,7 @@ Data processing done by Jackie using the following settings:
 
 ```{r cc_and phenom pre_trial, echo=FALSE, message=FALSE, warning=FALSE}
 
-include_graphics("W:/VF/Pinnaroo 2022/Biomass Data Maps/maps/Biomass_maps_Pre_all_grids.jpg")
+include_graphics("W:/VF/Pinnaroo 2022/Biomass/maps/Biomass_maps_Post_all_grids.png")
 
 ```
 
@@ -145,7 +147,9 @@ Confirm the sampling size I have assumed 2*1m cuts with 60cm row spacing (revise
 
 ```{r no_trial biomass vs biomass survey, echo=FALSE, message=FALSE, warning=FALSE}
 
-pre_trial_biomass <- read.csv("W:/VF/Pinnaroo 2022/Biomass Data Maps/calibration_pre_trial_biomass/pre_trial_pts_extract_grids.csv")
+pre_trial_biomass <- read.csv("W:/VF/Pinnaroo 2022/Biomass/calibration_biomass/calibration_pre_trial_biomass/pre_trial_pts_extract_grids.csv")
+
+
                              
                              
 #names(no_trial_biomass)
@@ -350,7 +354,7 @@ Converted using the values and grids outlined above.
 
 ```{r phenom DIST converted to biomass no trial, echo=FALSE, message=FALSE, warning=FALSE}
 
-include_graphics("W:/VF/Pinnaroo 2022/Biomass Data Maps/maps/Pre trial_biomass_LAI.png")
+include_graphics("W:/VF/Pinnaroo 2022/Biomass/maps/Pre trial_biomass_LAI.png")
 
 
 ```
