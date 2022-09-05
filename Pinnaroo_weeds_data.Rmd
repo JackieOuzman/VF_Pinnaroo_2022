@@ -36,6 +36,11 @@ library(maps)
 library(mapdata)
 
 library(raster)
+library(agricolae)
+library(FSA) 
+library(agricolae)
+library(multcomp)
+library(lsmeans)
 #library(hms) Add these before I use them?
 #library(plyr)
 ```
