@@ -143,6 +143,7 @@ weeds_all <- weeds_all %>%
   dplyr::rename("Total count weeds" = "total_coun")
 # make cluster a factor
 weeds_all$cluster2Pr <- as.factor(weeds_all$cluster2Pr )
+weeds_all$Paddock_ar <- as.factor(weeds_all$Paddock_ar )
 
 weeds_all_long <- weeds_all %>% 
   pivot_longer(
@@ -328,3 +329,32 @@ DT::datatable(summary_pre_trial_Cluster ,
 
 ```
 
+
+
+## grouping by VF for pre trial weed counts
+
+```{r pre trial box plots Paddock_ar, echo=FALSE, message=FALSE, warning=FALSE}
+
+####   Plots pre trial#### 
+
+
+
+weeds_all_long %>%  
+  filter(event ==  "pre trial") %>% 
+  ggplot(aes(x = as.factor(Paddock_ar), y = value,
+             color = (Paddock_ar))) +
+  geom_point(position = position_dodge(width=0.75)) +
+  geom_boxplot(alpha = 0.1, width=0.75, 
+               aes(fill = Paddock_ar))+
+                 theme_bw()+
+                 facet_wrap( .~ `weed type`, scales = "free")+
+                 labs(x = "paddock area", y = "count", title =  "pre trial")+
+                 theme(legend.position = "none")
+
+
+
+
+
+
+
+```

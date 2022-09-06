@@ -185,4 +185,21 @@ DT::datatable(summary_pre_trial_Cluster ,
                                          targets = "_all")))) %>%
   formatRound(c(5), 2) %>%
   formatRound(c(7:14), 2) #this round clm number  to 2 decimal places
+
+
+
+
+
+weeds_all_long %>%  
+  filter(event ==  "pre trial") %>% 
+  ggplot(aes(x = as.factor(Paddock_ar), y = value,
+             color = (Paddock_ar))) +
+  geom_point(position = position_dodge(width=0.75)) +
+  geom_boxplot(alpha = 0.1, width=0.75, 
+               aes(fill = Paddock_ar))+
+                 theme_bw()+
+                 facet_wrap( .~ `weed type`, scales = "free")+
+                 labs(x = "paddock area", y = "count", title =  "pre trial")+
+                 theme(legend.position = "none")
+               
   
