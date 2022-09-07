@@ -362,7 +362,7 @@ weeds_all_long %>%
 
 
 
-## Below code is not working
+
 
 
 ```{r pre trial anova and summary prep with VF grouping, message=FALSE, warning=FALSE, include=FALSE}
@@ -838,7 +838,7 @@ DT::datatable(summary_post_trial_VF ,
 ```
 
 
-## grouping by assessor for post trial weed counts post trial
+## grouping by assessor for post trial weed counts
 
 ```{r post trial box plots Assessor, echo=FALSE, message=FALSE, warning=FALSE}
 
