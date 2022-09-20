@@ -48,6 +48,8 @@ names(animal_GPS_data)
 animal_GPS_data <- animal_GPS_data %>% 
   dplyr::select(ID_jaxs:Jax_fence_ID, GMT:local_time)
 
+### filter data between two dates start and end of trial
+
 animal_GPS_data <- animal_GPS_data %>%  filter(local_time >= ymd_hms("2022-07-20 15:21:00", tz= "Australia/Adelaide"), #yyy-mm-dd hh:mm:ss
                                                local_time <=  ymd_hms("2022-07-29 06:30:00", tz= "Australia/Adelaide"))
 
@@ -90,20 +92,18 @@ Fence_activation_time <-Fence_activation_time %>%
   ))   
   
 Fence_activation_time <-Fence_activation_time %>% 
-  mutate(grazing_time = end_fence - start_fence)
+  mutate(grazing_time_hours = difftime(end_fence, start_fence , units="hours"))
 
 str(Fence_activation_time)
 
 
 
+### append the activation - grazing time data to the animal log
 
-
-##############################################################################################
-#######          UP TO HERE WORK OUT THE DIFFERENCE IN TIME ##################################
-##############################################################################################
-
-
-
+animal_GPS_data <- 
+  left_join(animal_GPS_data, Fence_activation_time)
+  
+rm(Fence_activation_time)
 
 ############################################################################################
 ############                  Turn into spatial data          ##############################
@@ -125,6 +125,9 @@ animal_GPS_data_sf_trans <-
   st_transform(animal_GPS_data_sf, crs = 28354)
 
 
+rm(animal_GPS_data,animal_GPS_data_sf )
+
+
 ############################################################################################
 ############                  bring in boundaries             ##############################
 ############################################################################################
@@ -132,15 +135,23 @@ animal_GPS_data_sf_trans <-
 
 
 pinnaroo_Vf_area_hard_fence_bound <- st_read(paste0(path_spatial, "pinnaroo_VF_boundary_dGPS_proj.shp"))  # this is the hard fences
-pinnaroo_Vf_area <- st_read("W:/VF/Pinnaroo 2022/Spatial/VF/VF_display_modified/all_VF.shp")
-pinnaroo_paddock_area <- st_read("W:/VF/Pinnaroo 2022/Spatial/pinnaroo_boundary_dGPS_proj.shp")
 
-str(pinnaroo_Vf_area)
+pinnaroo_paddock_area <-             st_read("W:/VF/Pinnaroo 2022/Spatial/pinnaroo_boundary_dGPS_proj.shp")
+pinnaroo_Vf_area <-                  st_read("W:/VF/Pinnaroo 2022/Spatial/VF/VF_display_modified/all_VF.shp")
 
-pinnaroo_Vf_area
+str(pinnaroo_Vf_area_hard_fence_bound)
+pinnaroo_Vf_area_hard_fence_bound %>%  distinct(Name)
+pinnaroo_Vf_area_hard_fence_bound<- 
+  pinnaroo_Vf_area_hard_fence_bound %>%
+  filter(Name== "VF")
+
+
+plot(pinnaroo_Vf_area_hard_fence_bound)
+plot(pinnaroo_Vf_area)
+plot(pinnaroo_paddock_area)
 
 pinnaroo_Vf_area_hard_fence_bound <-
-  st_transform(pinnaroo_paddock_area, crs = 28354)
+  st_transform(pinnaroo_Vf_area_hard_fence_bound, crs = 28354)
 
 pinnaroo_paddock_area <-
   st_transform(pinnaroo_paddock_area, crs = 28354)
@@ -148,33 +159,54 @@ pinnaroo_Vf_area <-
   st_transform(pinnaroo_Vf_area, crs = 28354)
 
 
-# pinnaroo_Vf_area <- pinnaroo_Vf_area %>% 
-#   mutate(day_since_trial_start = case_when(
-#     VF_ID == "VP01" ~       1,
-#     VF_ID == "VP02" ~       5,
-#     VF_ID == "VP03_2" ~     6,
-#     VF_ID == "VP04" ~       11
-#   ))
-
 
 
 pinnaroo_Vf_area <- pinnaroo_Vf_area %>% 
-  mutate(VF_area = case_when(
-    VF_ID == "VP01" ~       "VF_area1",
-    VF_ID == "VP02" ~       "VF_area2",
-    VF_ID == "VP03_2" ~     "VF_area3",
-    VF_ID == "VP04" ~       "VF_area4"
-  ))
+  dplyr::arrange(Jax_Fence_)
 
+pinnaroo_Vf_area <-pinnaroo_Vf_area %>% 
+  mutate(start_fence = c(
+    as.POSIXct(ymd_hms("2022-07-20 15:21:00", tz= "Australia/Adelaide")), 
+    as.POSIXct(ymd_hms("2022-07-22 11:47:00", tz= "Australia/Adelaide")),
+    as.POSIXct(ymd_hms("2022-07-22 13:43:00", tz= "Australia/Adelaide")),
+    as.POSIXct(ymd_hms("2022-07-25 10:02:00", tz= "Australia/Adelaide")),
+    as.POSIXct(ymd_hms("2022-07-26 10:57:00", tz= "Australia/Adelaide")),
+    as.POSIXct(ymd_hms("2022-07-27 11:58:00", tz= "Australia/Adelaide"))
+  ))
+pinnaroo_Vf_area <-pinnaroo_Vf_area %>% 
+  mutate(end_fence = c(
+    as.POSIXct(ymd_hms("2022-07-22 11:47:00", tz= "Australia/Adelaide")),
+    as.POSIXct(ymd_hms("2022-07-22 13:43:00", tz= "Australia/Adelaide")),
+    as.POSIXct(ymd_hms("2022-07-25 10:02:00", tz= "Australia/Adelaide")),
+    as.POSIXct(ymd_hms("2022-07-26 10:57:00", tz= "Australia/Adelaide")),
+    as.POSIXct(ymd_hms("2022-07-27 11:58:00", tz= "Australia/Adelaide")),
+    as.POSIXct(ymd_hms("2022-07-29 06:30:00", tz= "Australia/Adelaide"))
+  ))   
+
+
+str(pinnaroo_Vf_area)
+
+
+################################################################
+###               Clip to the VF hard fences           #########
+################################################################
+
+plot(pinnaroo_Vf_area_hard_fence_bound)
 
 #To the large block boundary
 animal_GPS_data_sf_trans_clip <-
-  st_intersection(animal_GPS_data_sf_trans, pinnaroo_paddock_area)
+  st_intersection(animal_GPS_data_sf_trans, pinnaroo_Vf_area_hard_fence_bound)
 
 
-## remove all the rows that dont have fence ID
+## remove all the rows that don't have fence ID
 #unique(animal_GPS_data_sf_trans_clip$fencesID)
 animal_GPS_data_sf_trans_clip <-animal_GPS_data_sf_trans_clip %>% 
   filter(!is.na(fencesID) ) %>% 
   filter(fencesID !=  "NULL")
+str(animal_GPS_data_sf_trans_clip)
 
+
+rm(animal_GPS_data, animal_GPS_data_sf, animal_GPS_data_sf_trans)
+
+
+########################################################################################################
