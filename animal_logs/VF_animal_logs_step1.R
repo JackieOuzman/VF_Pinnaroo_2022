@@ -92,18 +92,33 @@ Fence_activation_time <-Fence_activation_time %>%
   ))   
   
 Fence_activation_time <-Fence_activation_time %>% 
-  mutate(grazing_time_hours = difftime(end_fence, start_fence , units="hours"))
+  mutate(grazing_time_hours_for_VF = difftime(end_fence, start_fence , units="hours"))
 
 str(Fence_activation_time)
 
+### add clm for the start of the trial
+Fence_activation_time <-Fence_activation_time %>% 
+  mutate(start_trial =  as.POSIXct(ymd_hms("2022-07-20 15:21:00", tz= "Australia/Adelaide"))) 
+
+str(Fence_activation_time)
 
 
 ### append the activation - grazing time data to the animal log
 
 animal_GPS_data <- 
   left_join(animal_GPS_data, Fence_activation_time)
-  
+ 
+animal_GPS_data <- animal_GPS_data %>% 
+  mutate(graz_hours_frm_start_trial_to_log = difftime(local_time, start_trial , units="hours"))
+
+
+ 
 rm(Fence_activation_time)
+str(animal_GPS_data)
+
+
+
+
 
 ############################################################################################
 ############                  Turn into spatial data          ##############################
@@ -210,3 +225,25 @@ rm(animal_GPS_data, animal_GPS_data_sf, animal_GPS_data_sf_trans)
 
 
 ########################################################################################################
+
+
+pinnaroo_Vf_area <- pinnaroo_Vf_area %>% 
+  rename("Jax_fence_ID"  = "Jax_Fence_")
+
+
+
+names(animal_GPS_data_sf_trans_clip)
+names(pinnaroo_Vf_area)
+names(animal_GPS_data_sf_trans_clip) #Jax_fence_ID
+#try having the same name on both pinnaroo_Vf_area and animal_GPS_data_sf_trans_clip
+
+ggplot() +
+  geom_sf(data = pinnaroo_paddock_area, color = "black", fill = NA) +
+  geom_sf(data = pinnaroo_Vf_area, color = "black", fill = NA) +
+  geom_sf(data = animal_GPS_data_sf_trans_clip ,alpha = 0.01) +
+  theme_bw()+
+  theme(legend.position = "none",
+        axis.ticks = element_blank(), axis.text.x = element_blank(), axis.text.y = element_blank())+
+  facet_wrap(. ~ Jax_fence_ID)
+
+
