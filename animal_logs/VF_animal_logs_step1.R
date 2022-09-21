@@ -227,8 +227,35 @@ rm(animal_GPS_data, animal_GPS_data_sf, animal_GPS_data_sf_trans)
 ########################################################################################################
 
 
+
 pinnaroo_Vf_area <- pinnaroo_Vf_area %>% 
   rename("Jax_fence_ID"  = "Jax_Fence_")
+
+#Write out files "W:/VF/Pinnaroo 2022/animal_log/jax_working_outputs"
+
+output_path <- "W:/VF/Pinnaroo 2022/animal_log/jax_working_outputs"
+str(pinnaroo_paddock_area)
+str(pinnaroo_Vf_area)
+str(animal_GPS_data_sf_trans_clip)
+
+
+write_sf(pinnaroo_paddock_area)
+st_write(pinnaroo_paddock_area, 
+         dsn = output_path, 
+         layer = "pinnaroo_paddock_area.shp", 
+         driver = "ESRI Shapefile")
+
+st_write(pinnaroo_Vf_area, 
+         dsn = output_path, 
+         layer = "pinnaroo_Vf_area.shp", 
+         driver = "ESRI Shapefile")
+
+#test_file <- head(animal_GPS_data_sf_trans_clip)
+
+st_write(animal_GPS_data_sf_trans_clip, 
+         paste0(output_path,"/animal_GPS_data_sf_trans_clip.csv"), 
+         layer_options = "GEOMETRY=AS_XY")
+
 
 
 
