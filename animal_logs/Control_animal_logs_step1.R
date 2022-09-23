@@ -72,9 +72,11 @@ end_of_trial    <-  yday(ymd_hms("2022-07-28 07:30:00", tz= "Australia/Adelaide"
 control_animal_GPS_data <- control_animal_GPS_data %>% 
   mutate(start_fence = "NA",
          end_fence = "NA",
+         grazing_time_hours_for_VF = "NA",
          start_trial =  as.POSIXct(ymd_hms("2022-07-20 15:30:00", tz= "Australia/Adelaide")), 
-         Name = "control",
-         POLY_AREA = "NA"
+         #Name = "control",
+         #POLY_AREA = "NA",
+         Jax_fence_ID = "NA"
          )
 str(control_animal_GPS_data)
  
@@ -144,27 +146,7 @@ pinnaroo_control_area <-
 
 
 
-# pinnaroo_Vf_area <-pinnaroo_Vf_area %>% 
-#   mutate(start_fence = c(
-#     as.POSIXct(ymd_hms("2022-07-20 15:21:00", tz= "Australia/Adelaide")), 
-#     as.POSIXct(ymd_hms("2022-07-22 11:47:00", tz= "Australia/Adelaide")),
-#     as.POSIXct(ymd_hms("2022-07-22 13:43:00", tz= "Australia/Adelaide")),
-#     as.POSIXct(ymd_hms("2022-07-25 10:02:00", tz= "Australia/Adelaide")),
-#     as.POSIXct(ymd_hms("2022-07-26 10:57:00", tz= "Australia/Adelaide")),
-#     as.POSIXct(ymd_hms("2022-07-27 11:58:00", tz= "Australia/Adelaide"))
-#   ))
-# pinnaroo_Vf_area <-pinnaroo_Vf_area %>% 
-#   mutate(end_fence = c(
-#     as.POSIXct(ymd_hms("2022-07-22 11:47:00", tz= "Australia/Adelaide")),
-#     as.POSIXct(ymd_hms("2022-07-22 13:43:00", tz= "Australia/Adelaide")),
-#     as.POSIXct(ymd_hms("2022-07-25 10:02:00", tz= "Australia/Adelaide")),
-#     as.POSIXct(ymd_hms("2022-07-26 10:57:00", tz= "Australia/Adelaide")),
-#     as.POSIXct(ymd_hms("2022-07-27 11:58:00", tz= "Australia/Adelaide")),
-#     as.POSIXct(ymd_hms("2022-07-29 06:30:00", tz= "Australia/Adelaide"))
-#   ))   
-# 
-# 
-# str(pinnaroo_Vf_area)
+
 
 
 ################################################################
@@ -187,23 +169,39 @@ rm(control_animal_GPS_data, control_animal_GPS_data_sf, control_animal_GPS_data_
 
 
 output_path <- "W:/VF/Pinnaroo 2022/animal_log/jax_working_outputs"
+str(control_animal_GPS_data_sf_trans_clip)
 
-st_write(control_animal_GPS_data_sf_trans_clip, 
-         paste0(output_path,"/control_animal_GPS_data_sf_trans_clip.csv"), 
-         layer_options = "GEOMETRY=AS_XY")
+############################################################################################################################
+### format the aniaml log data so I output the clm with local time and keep time difference cals and have clm for x and y
 
-
-
-
+## 1.convert the geom clm into x and y clms
 
 
-ggplot() +
-  geom_sf(data = pinnaroo_paddock_area, color = "black", fill = NA) +
-  #geom_sf(data = pinnaroo_Vf_area, color = "black", fill = NA) +
-  geom_sf(data = control_animal_GPS_data_sf_trans_clip ,alpha = 0.01) +
-  theme_bw()+
-  theme(legend.position = "none",
-        axis.ticks = element_blank(), axis.text.x = element_blank(), axis.text.y = element_blank())
-  
+coordinates <-as.data.frame( st_coordinates(control_animal_GPS_data_sf_trans_clip))
+control_animal_GPS_data_sf_trans_clip <- as.data.frame(control_animal_GPS_data_sf_trans_clip)
+
+control_animal_GPS_data_sf_trans_clip <- control_animal_GPS_data_sf_trans_clip %>% 
+  dplyr::select(-"geometry")
+
+
+control_animal_GPS_data_sf_trans_clip <-   cbind(control_animal_GPS_data_sf_trans_clip,coordinates )
+## ensure the date and time clms are outputting and outputting in the correct format.
+
+
+control_animal_GPS_data_sf_trans_clip$local_time <-   format(control_animal_GPS_data_sf_trans_clip$local_time, usetz=TRUE)
+control_animal_GPS_data_sf_trans_clip$GMT        <-   format(control_animal_GPS_data_sf_trans_clip$GMT, usetz=TRUE)
+control_animal_GPS_data_sf_trans_clip$start_fence <-  format(control_animal_GPS_data_sf_trans_clip$start_fence, usetz=TRUE)
+control_animal_GPS_data_sf_trans_clip$end_fence    <- format(control_animal_GPS_data_sf_trans_clip$end_fence, usetz=TRUE)
+control_animal_GPS_data_sf_trans_clip$start_trial    <- format(control_animal_GPS_data_sf_trans_clip$start_trial, usetz=TRUE)
+
+write.csv(control_animal_GPS_data_sf_trans_clip, 
+          paste0(output_path,"/control_animal_GPS_data_sf_trans_clip.csv"), 
+          row.names=FALSE)
+
+
+
+
+
+
 
 

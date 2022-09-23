@@ -250,27 +250,34 @@ st_write(pinnaroo_Vf_area,
          layer = "pinnaroo_Vf_area.shp", 
          driver = "ESRI Shapefile")
 
-#test_file <- head(animal_GPS_data_sf_trans_clip)
 
-st_write(animal_GPS_data_sf_trans_clip, 
-         paste0(output_path,"/animal_GPS_data_sf_trans_clip.csv"), 
-         layer_options = "GEOMETRY=AS_XY")
+############################################################################################################################
+### format the aniaml log data so I output the clm with local time and keep time difference cals and have clm for x and y
 
-
+## convert the geom clm into x and y clms
 
 
-names(animal_GPS_data_sf_trans_clip)
-names(pinnaroo_Vf_area)
-names(animal_GPS_data_sf_trans_clip) #Jax_fence_ID
-#try having the same name on both pinnaroo_Vf_area and animal_GPS_data_sf_trans_clip
+coordinates <-as.data.frame( st_coordinates(animal_GPS_data_sf_trans_clip))
+animal_GPS_data_sf_trans_clip <- as.data.frame(animal_GPS_data_sf_trans_clip)
 
-ggplot() +
-  geom_sf(data = pinnaroo_paddock_area, color = "black", fill = NA) +
-  geom_sf(data = pinnaroo_Vf_area, color = "black", fill = NA) +
-  geom_sf(data = animal_GPS_data_sf_trans_clip ,alpha = 0.01) +
-  theme_bw()+
-  theme(legend.position = "none",
-        axis.ticks = element_blank(), axis.text.x = element_blank(), axis.text.y = element_blank())+
-  facet_wrap(. ~ Jax_fence_ID)
+animal_GPS_data_sf_trans_clip <- animal_GPS_data_sf_trans_clip %>% 
+  dplyr::select(-"geometry")
+
+
+animal_GPS_data_sf_trans_clip <-   cbind(animal_GPS_data_sf_trans_clip,coordinates )
+## ensure the date and time clms are outputting and outputting in the correct format.
+
+
+animal_GPS_data_sf_trans_clip$local_time <-   format(animal_GPS_data_sf_trans_clip$local_time, usetz=TRUE)
+animal_GPS_data_sf_trans_clip$GMT        <-   format(animal_GPS_data_sf_trans_clip$GMT, usetz=TRUE)
+animal_GPS_data_sf_trans_clip$start_fence <-  format(animal_GPS_data_sf_trans_clip$start_fence, usetz=TRUE)
+animal_GPS_data_sf_trans_clip$end_fence    <- format(animal_GPS_data_sf_trans_clip$end_fence, usetz=TRUE)
+animal_GPS_data_sf_trans_clip$start_trial    <- format(animal_GPS_data_sf_trans_clip$start_trial, usetz=TRUE)
+
+write.csv(animal_GPS_data_sf_trans_clip, 
+          paste0(output_path,"/animal_GPS_data_sf_trans_clip.csv"), 
+          row.names=FALSE)
+
+
 
 
