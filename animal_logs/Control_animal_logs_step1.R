@@ -74,9 +74,7 @@ control_animal_GPS_data <- control_animal_GPS_data %>%
          end_fence = "NA",
          grazing_time_hours_for_VF = "NA",
          start_trial =  as.POSIXct(ymd_hms("2022-07-20 15:30:00", tz= "Australia/Adelaide")), 
-         #Name = "control",
-         #POLY_AREA = "NA",
-         Jax_fence_ID = "NA"
+         Jax_fence_ID = "Control"
          )
 str(control_animal_GPS_data)
  
