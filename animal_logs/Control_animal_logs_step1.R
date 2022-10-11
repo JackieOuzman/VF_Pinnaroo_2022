@@ -16,20 +16,26 @@ path_spatial <- "W:/VF/Pinnaroo 2022/Spatial/VF/VF_display_modified/"
   
 
 
+control_animal_GPS_data <- read_csv("W:/VF/Pinnaroo 2022/animal_log/raw_data_supplied/trial_csiro_pinnaroo_mob_274_control_mob_filtered.csv")
 
+
+#format time and date clm from character to time
+control_animal_GPS_data <-
+  control_animal_GPS_data %>%
+  mutate(timeOfEvent = as.POSIXct(timeOfEvent, tz = "GMT", format = "%d/%m/%Y %H:%M"))
   
 
 
 
 
-control_animal_GPS_data <- read_csv("W:/VF/Pinnaroo 2022/animal_log/raw_data_supplied/trial_csiro_pinnaroo_mob_274_control_mob_filtered.csv", 
-                           col_types = 
-                             cols(
-                               timeOfEvent                = col_datetime(format = "%d/%m/%Y %H:%M")#,
-                               #local_time               = col_datetime(format = "%d/%m/%Y %H:%M"),
-                               #EST                      = col_datetime(format = "%d/%m/%Y %H:%M")
-                               ))
- 
+# control_animal_GPS_data <- read_csv("W:/VF/Pinnaroo 2022/animal_log/raw_data_supplied/trial_csiro_pinnaroo_mob_274_control_mob_filtered.csv", 
+#                            col_types = 
+#                              cols(
+#                                timeOfEvent                = col_datetime(format = "%d/%m/%Y %H:%M")#,
+#                                #local_time               = col_datetime(format = "%d/%m/%Y %H:%M"),
+#                                #EST                      = col_datetime(format = "%d/%m/%Y %H:%M")
+#                                ))
+#  
 
 
 

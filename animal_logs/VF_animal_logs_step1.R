@@ -11,30 +11,23 @@ library(sf)
 
 ### bring in animal logs for VF all
 
-path <- "W:/VF/Pinnaroo 2022/animal_log/jax_working/all_data_R/"
+
 path_spatial <- "W:/VF/Pinnaroo 2022/Spatial/VF/VF_display_modified/"
-  
-
-
-
-  
 
 
 
 
-animal_GPS_data <- read_csv(paste0(path, "trial_csiro_pinnaroo_mob_273_angus_heifers_filtered_fenceID_local_time.csv"), 
-                           col_types = 
-                             cols(
-                               timeOfEvent                = col_datetime(format = "%d/%m/%Y %H:%M"),
-                               local_time               = col_datetime(format = "%d/%m/%Y %H:%M"),
-                               EST                      = col_datetime(format = "%d/%m/%Y %H:%M")
-                               ))
- 
+animal_GPS_data <- read_csv("W:/VF/Pinnaroo 2022/animal_log/raw_data_supplied/trial_csiro_pinnaroo_mob_273_angus_heifers_filtered.csv")
 
-animal_GPS_data <- animal_GPS_data %>% 
-  rename ("local_time_excel" = "local_time",
-          "EST_excel" = "EST")
-str(animal_GPS_data)
+
+#format time and date clm from character to time
+animal_GPS_data <-
+  animal_GPS_data %>%
+  mutate(timeOfEvent = as.POSIXct(timeOfEvent, tz = "GMT", format = "%d/%m/%Y %H:%M"))
+
+
+
+
 
 
 animal_GPS_data <- animal_GPS_data %>% 
@@ -43,10 +36,35 @@ animal_GPS_data <- animal_GPS_data %>%
 animal_GPS_data <- animal_GPS_data %>% 
   mutate(local_time = with_tz(GMT, tz = "Australia/Adelaide"))
 
+str(animal_GPS_data)
 
 names(animal_GPS_data)
+
+## Add a clm for ID_jaxs
 animal_GPS_data <- animal_GPS_data %>% 
-  dplyr::select(ID_jaxs:Jax_fence_ID, GMT:local_time)
+  dplyr::mutate( ID_jaxs = row_number())
+
+## Add a clm for Jax_fence_ID
+
+animal_GPS_data <- animal_GPS_data %>% 
+  dplyr::mutate(
+    Jax_fence_ID = case_when(
+      fencesID == "1a459" ~ "1",
+      fencesID == "1a2b9" ~ "2",
+      fencesID == "14143" ~ "3",
+      fencesID == "1b424" ~ "4",
+      fencesID == "18711" ~ "5",
+      fencesID == "1cdd8" ~ "6",
+      fencesID == "NULL" ~ "no fence activite",
+      TRUE                      ~ "check"))
+
+
+## reorder the clms
+animal_GPS_data <- animal_GPS_data %>% 
+  dplyr::select(ID_jaxs,Jax_fence_ID, deviceUIDHex:local_time)
+
+
+
 
 ### filter data between two dates start and end of trial
 
@@ -71,6 +89,17 @@ deactivation    <-  yday(ymd_hms("2022-07-29 06:30:00", tz= "Australia/Adelaide"
 
 Fence_activation_time <- animal_GPS_data %>% 
   distinct(Jax_fence_ID)
+
+Fence_activation_time <- Fence_activation_time %>% 
+  filter(Jax_fence_ID != "no fence activite")
+
+Fence_activation_time <- Fence_activation_time %>% 
+  arrange(Jax_fence_ID)
+## _______________________________--------------------------------------________________________###
+
+#### having trouble here ###########
+
+
 
 Fence_activation_time <-Fence_activation_time %>% 
   mutate(start_fence = c(
@@ -239,7 +268,7 @@ str(pinnaroo_Vf_area)
 str(animal_GPS_data_sf_trans_clip)
 
 
-write_sf(pinnaroo_paddock_area)
+#write_sf(pinnaroo_paddock_area)
 st_write(pinnaroo_paddock_area, 
          dsn = output_path, 
          layer = "pinnaroo_paddock_area.shp", 
